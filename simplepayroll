@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Payroll System</title>
+  <style>
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      background-color: #CCF1FF;
+      color: deeppink;
+      font-family: didot, serif;
+    }
+
+
+    button {
+      background-color: plum;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      font-family: didot, serif;
+      font-size: 14px;
+      height: 40px;
+      line-height: 20px;
+      padding: 10px 16px;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    #mainDiv {
+      display: flex;
+      justify-content: space-between;
+      width: 80%;
+    }
+
+    #formDiv {
+      grid-row-start:2;
+      grid-row-end:15;
+      grid-column-start:1;
+      grid-column-end:3;
+      width:310px;
+      padding-left:20px;
+      border-top:solid 1px;
+      border-left:solid 1px;      
+      border-bottom:solid 1px;
+      border-right:solid 1px;  
+      height:350px; 
+      background-color: #FAFFC7;   
+    }
+
+    #tableDiv {
+      grid-row-start:2;
+      grid-row-end:20;
+      grid-column-start:5;
+      grid-column-end:8;
+      width:790px;
+      height:600px;
+      font-size: 14px;
+      background-color: #FAFFC7;
+      outline-style: dashed;     
+    }
+
+    h3 {
+      text-align: center;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    table, th, td {
+      text-align: center;
+      border-bottom: 1px dashed deeppink;
+      padding-left: 10px;
+      padding-right: 10px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+
+    input, button {
+      margin-bottom: 10px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1>&#127802 Payroll System &#127802</h1>
+  <div id="mainDiv">
+    <div id="formDiv">
+
+      <h3>Form</h3>
+<br>
+      <label for="employeeName">Employee Name:</label>
+      <input type="text" id="employeeName" required>
+<br><br>
+      <label for="daysWorked">Days Worked:</label>
+      <input type="number" id="daysWorked" min="0" required>
+<br><br>
+      <label for="dailyRate">Daily Rate:</label>
+      <input type="number" id="dailyRate" min="0" required>
+<br><br>
+      <label for="deductionAmount">Deduction Amount:</label>
+      <input type="number" id="deductionAmount" min="0" required>
+<br><br>
+
+<!-- HTML !-->
+<button onclick="addEmployee()" role="button">Add Employee</button>
+
+
+      <button onclick="deleteEmployee()">Delete Employee</button>
+    </div>
+
+    <div id="tableDiv">
+      <table id="payrollTable">
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>Employee Name</th>
+            <th>Days Worked</th>
+            <th>Daily Rate</th>
+            <th>Gross Pay</th>
+            <th>Deduction Amount</th>
+            <th>Net Pay</th>
+          </tr>
+        </thead>
+        <tbody id="payrollBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+ var payrollList = [];
+
+    function addEmployee() {
+      var employeeName = document.getElementById('employeeName').value;
+      var daysWorked = parseInt(document.getElementById('daysWorked').value);
+      var dailyRate = parseFloat(document.getElementById('dailyRate').value);
+      var deductionAmount = parseFloat(document.getElementById('deductionAmount').value);
+
+      var grossPay = daysWorked * dailyRate;
+      var netPay = grossPay - deductionAmount;
+
+      payrollList.push({
+        employeeName: employeeName,
+        daysWorked: daysWorked,
+        dailyRate: dailyRate,
+        grossPay: grossPay,
+        deductionAmount: deductionAmount,
+        netPay: netPay
+      });
+
+      updateTable();
+      clearInputFields();
+    }
+
+    function deleteEmployee() {
+      var lineNumber = prompt('Enter the Line Number to delete:');
+      lineNumber = parseInt(lineNumber);
+
+      if (lineNumber >= 1 && lineNumber <= payrollList.length) {
+        payrollList.splice(lineNumber - 1, 1);
+        updateTable();
+      } else {
+        alert('No line number typed in');
+      }
+    }
+
+    function updateTable() {
+      var payrollBody = document.getElementById('payrollBody');
+      payrollBody.innerHTML = '';
+
+      payrollList.forEach(function (employee, index) {
+        var row = payrollBody.insertRow();
+        var cellNo = row.insertCell(0);
+        var cellEmployeeName = row.insertCell(1);
+        var cellDaysWorked = row.insertCell(2);
+        var cellDailyRate = row.insertCell(3);
+        var cellGrossPay = row.insertCell(4);
+        var cellDeductionAmount = row.insertCell(5);
+        var cellNetPay = row.insertCell(6);
+
+        cellNo.innerHTML = index + 1;
+        cellEmployeeName.innerHTML = employee.employeeName;
+        cellDaysWorked.innerHTML = employee.daysWorked;
+        cellDailyRate.innerHTML = employee.dailyRate.toFixed(2);
+        cellGrossPay.innerHTML = employee.grossPay.toFixed(2);
+        cellDeductionAmount.innerHTML = employee.deductionAmount.toFixed(2);
+        cellNetPay.innerHTML = employee.netPay.toFixed(2);
+      });
+    }
+
+    function clearInputFields() {
+      document.getElementById('employeeName').value = '';
+      document.getElementById('daysWorked').value = '';
+      document.getElementById('dailyRate').value = '';
+      document.getElementById('deductionAmount').value = '';
+    }
+  </script>
+
+<br>
+        <a style = "font-size:20px;" href = "index.html">Go to Home Page</a>
+
+
+</body>
+</html>
